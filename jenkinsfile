@@ -1,0 +1,55 @@
+#!/usr/bin/env groovy
+pipeline{
+    agent any
+    environment{
+        AWS_ACCESS_KEY_ID = credentials();
+        AWS_SECRET_ACCESS = credentials();
+        AWS_DEFAULT_REGION = "ap-south-1"
+        }
+
+
+    stages{
+        stage("Create a EKS Cluster"){
+          steps{
+             script{
+                 dir('Terraform')
+                 {
+                    sh "terraform init"
+                    sh "terraform apply auto-approve"
+
+                 }
+
+
+             }
+
+
+          }
+
+
+        }
+        
+        stage("Create a EKS Cluster"){
+          steps{
+             script{
+                 dir('Kubernetes')
+                 {
+                    sh "aws eks update eks-kubeconfig --name myapp-eks-cluster"
+                    sh "kubectl apply -f nginx-deployment.yml"
+                    sh "kubectl apply -f nginx- service.yml"
+
+                 }
+
+
+             }
+
+
+          }
+
+
+        }
+        
+
+
+
+    }
+}
