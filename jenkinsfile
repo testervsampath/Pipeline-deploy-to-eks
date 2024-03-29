@@ -28,7 +28,7 @@ pipeline{
 
         }
         
-        stage("Create a EKS Cluster"){
+        stage("Deploy EKS Cluster"){
           steps{
              script{
                  dir('Kubernetes')
